@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MusicTableViewCell: UITableViewCell, UITableViewDelegate {
+class MusicTableViewCell: UITableViewCell {
     
     @IBOutlet weak var numberLabel: UILabel!
     @IBOutlet weak var musicSlider: UISlider!
@@ -18,14 +18,29 @@ class MusicTableViewCell: UITableViewCell, UITableViewDelegate {
     var elapsedTime: Float = 0.0
     let totalTime: Float = 10.0
     var onPlayPause: (() -> Void)?
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
+        setupUI()
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        resetCell()
+    }
+
+    private func setupUI() {
         musicSlider.minimumValue = 0
         musicSlider.maximumValue = totalTime
         musicSlider.value = elapsedTime
     }
-    
+
+    private func resetCell() {
+        stopPlaying()
+        elapsedTime = 0
+        musicSlider.value = 0
+    }
+
     @IBAction func playPauseTapped(_ sender: UIButton) {
         onPlayPause?()
     }
@@ -52,19 +67,4 @@ class MusicTableViewCell: UITableViewCell, UITableViewDelegate {
         timer?.invalidate()
         timer = nil
     }
-    
 }
-
-//    override func prepareForReuse() {
-//        super.prepareForReuse()
-//
-//        elapsedTime = 0
-//        musicSlider.value = 0
-//
-//        // Stop any active timer
-//        timer?.invalidate()
-//        timer = nil
-//
-//        isPlaying = false
-//    }
-
