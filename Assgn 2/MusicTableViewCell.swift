@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MusicTableViewCell: UITableViewCell {
+class MusicTableViewCell: UITableViewCell, UITableViewDelegate {
     
     @IBOutlet weak var numberLabel: UILabel!
     @IBOutlet weak var musicSlider: UISlider!
@@ -52,4 +52,19 @@ class MusicTableViewCell: UITableViewCell {
         timer?.invalidate()
         timer = nil
     }
+    
 }
+
+//    override func prepareForReuse() {
+//        super.prepareForReuse()
+//
+//        elapsedTime = 0
+//        musicSlider.value = 0
+//
+//        // Stop any active timer
+//        timer?.invalidate()
+//        timer = nil
+//
+//        isPlaying = false
+//    }
+

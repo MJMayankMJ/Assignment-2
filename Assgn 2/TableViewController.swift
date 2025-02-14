@@ -11,6 +11,7 @@ class TableViewController: UITableViewController{
 
     var maxNumber: Int = 0 // TextField no.
     var currentlyPlayingIndex: IndexPath? // Track currently playing cell
+    var playbackProgressRecord : [IndexPath: Float] = [:]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,19 +27,22 @@ class TableViewController: UITableViewController{
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.cellIdentifier, for: indexPath) as! MusicTableViewCell
         cell.numberLabel.text = "\(indexPath.row + 1)" // Show row number
-
+        
         // Handle play/pause callback
         cell.onPlayPause = { [weak self] in //weak self to prevent memory leaks
             self?.handlePlayPause(for: cell, at: indexPath)
         }
-
+        //So as the weird thing when the cells re use doesnt happen
+        cell.elapsedTime = playbackProgressRecord[indexPath] ?? 0
+        cell.musicSlider.value = cell.elapsedTime
         return cell
     }
 
+    //stop other than play yourself feature
     private func handlePlayPause(for cell: MusicTableViewCell, at indexPath: IndexPath) {
         
-        //stop other than play yourself feature
-        
+        playbackProgressRecord[indexPath] = cell.elapsedTime
+
         //if nothing is pressed
         if let currentlyPlayingIndex = currentlyPlayingIndex,
            //if playing cell is not MusicTableViewCell type as in diff thingie
